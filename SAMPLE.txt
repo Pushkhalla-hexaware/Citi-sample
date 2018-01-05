@@ -1,0 +1,36 @@
+import datetime
+article_data1=[]
+#total_data=[]
+D=download.Download()
+proxy = {'http' : 'hexproxy.hexaware.local:3128',
+           'https': 'hexproxy.hexaware.local:3128'}
+regex = re.compile('{}(.*){}'.format(re.escape('<a>'), re.escape('</a>')))
+url=D.get("http://www.msn.com/en-us/money/stockdetails/fi-126.1.PFE.NYS?symbol=PFE&form=PRFISB") #Fetches the whole page
+print url
+#Title=xpath.search(url,'//div[@class="full-width"/div/div/div/ul[@class="col"]/li[@class="hl1u1"]/a/div/@h4')#Fetches all the Headlines
+Title=xpath.search(url,'//li[@class="hl1u1"]/a/div/@h4')#Fetches all the Headlines
+print Title
+Links=xpath.search(url,'//div[@class="full-width"/div/div/div/ul[@class="col"]/li[@class="hl1u1"]/a/@href')#Fetches all the hyperlinks
+print Links
+Source=xpath.search(url,'//div[@class="full-width"/div/div/div/ul[@class="col"]/li[@class="hl1u1"]/a/div/span[@class="sourcename"]')#Fetches all the news Source
+print Source
+
+for i in range(0,len(Source)):
+    link = D.get(Links[i])
+    article_data=xpath.search(link,'//div[@id="articlebody"]')
+    article_data1.append(article_data[0]) #Fetching all the main data articles
+    i+=1
+print'Serial.No'+','+'\t'+'Source'+'\t'+','+'Headlines'+'\t'+','+'Hyperlinks'+','+'\t'+'Article data'
+for i in range(0,len(Source)):
+ print(str(i+1)+','+'\t'+Title[i]+'\t'+','+Links[i]+','+'\t'+Source[i]+','+'\t'+article_data1[i])
+
+
+#data=str(i+1)+'~'+'ABBV'+'~'+Title[i]+'~'+Source[i]+'~'+Links[i]+'~'+article_data1[i]+'\n'
+#total_data.append(data)
+#print total_data
+#hdfs = PyWebHdfsClient(host='172.25.121.245',port='50070', user_name='indu')
+#my_file = 'user/indu/webscraping/moneycentral.txt'
+#my_data = ''.join(str(e) for e in total_data)
+#hdfs.create_file(my_file, my_data)
+
+
